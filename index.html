@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Farmacia BONDIA - Bistrița</title>
+    <style>
+        :root {
+            --vintage-green: #1b4332;
+            --gold-accent: #b08d57;
+            --cream-bg: #fdfaf5;
+            --dark-text: #2c2c2c;
+            --white: #ffffff;
+        }
+
+        body {
+            font-family: 'Georgia', serif;
+            margin: 0;
+            background-color: var(--cream-bg);
+            color: var(--dark-text);
+            line-height: 1.6;
+        }
+
+        /* Header Vintage Estetic */
+        header {
+            background-color: var(--white);
+            padding: 60px 20px;
+            text-align: center;
+            border-bottom: 3px double var(--vintage-green);
+            background-image: url('https://www.transparenttextures.com/patterns/paper-fibers.png');
+        }
+
+        header h1 {
+            font-size: 3.5rem;
+            margin: 0;
+            color: var(--vintage-green);
+            text-transform: uppercase;
+            letter-spacing: 5px;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+        }
+
+        .motto {
+            font-style: italic;
+            color: var(--gold-accent);
+            font-size: 1.2rem;
+            margin-top: 15px;
+            border-top: 1px solid #eee;
+            display: inline-block;
+            padding-top: 10px;
+        }
+
+        /* Navigare */
+        nav {
+            display: flex;
+            justify-content: center;
+            background: var(--vintage-green);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        }
+
+        nav button {
+            background: none;
+            border: none;
+            color: #e0e0e0;
+            padding: 15px 25px;
+            cursor: pointer;
+            font-family: 'Georgia', serif;
+            font-size: 1rem;
+            text-transform: uppercase;
+            transition: 0.3s;
+        }
+
+        nav button:hover {
+            color: var(--white);
+            background: rgba(255,255,255,0.1);
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 40px auto;
+            padding: 40px;
+            background: var(--white);
+            border: 1px solid #dcdcdc;
+            box-shadow: 0 0 20px rgba(0,0,0,0.05);
+            border-radius: 4px;
+        }
+
+        .page { display: none; animation: fadeIn 0.5s; }
+        .active { display: block; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        h2 {
+            color: var(--vintage-green);
+            border-bottom: 2px solid var(--gold-accent);
+            padding-bottom: 10px;
+            margin-bottom: 25px;
+            text-transform: uppercase;
+        }
+
+        /* Grid Incaperi */
+        .grid-incaperi {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .card {
+            padding: 20px;
+            background: #fafafa;
+            border: 1px solid #eee;
+            border-top: 4px solid var(--vintage-green);
+        }
+
+        .card h3 { color: var(--vintage-green); margin-top: 0; }
+
+        /* Tabel Personal */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td { padding: 15px; text-align: left; border-bottom: 1px solid #eee; }
+        th { background: var(--vintage-green); color: white; font-weight: normal; }
+
+        /* Sectiunea Contact & Mesaje */
+        .contact-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+        }
+
+        .contact-info-box {
+            padding: 25px;
+            background: #fdfaf5;
+            border: 1px solid #e0d7c6;
+        }
+
+        .form-box {
+            padding: 25px;
+            border: 1px solid #eee;
+            background: #fff;
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0 20px 0;
+            border: 1px solid #ccc;
+            border-radius: 2px;
+            font-family: 'Georgia', serif;
+        }
+
+        .btn-send {
+            background: var(--vintage-green);
+            color: white;
+            padding: 15px;
+            border: none;
+            width: 100%;
+            cursor: pointer;
+            font-size: 1rem;
+            text-transform: uppercase;
+        }
+
+        .btn-send:hover { background: #2a5a44; }
+
+        /* Panou Admin Test */
+        .admin-panel {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 2px dashed #ccc;
+        }
+
+        footer {
+            background: var(--vintage-green);
+            color: #bdc3c7;
+            text-align: center;
+            padding: 40px 20px;
+            margin-top: 50px;
+        }
+    </style>
+</head>
+<div id="imageModal" style="
+    display:none;
+    position:fixed;
+    z-index:2000;
+    left:0;
+    top:0;
+    width:100%;
+    height:100%;
+    background:rgba(0,0,0,0.8);
+    justify-content:center;
+    align-items:center;
+">
+    <span onclick="closeImage()" style="
+        position:absolute;
+        top:20px;
+        right:30px;
+        color:white;
+        font-size:40px;
+        cursor:pointer;
+    ">&times;</span>
+
+    <img id="modalImg" style="
+        max-width:90%;
+        max-height:90%;
+        border:5px solid white;
+    ">
+</div>
+<body>
+
+<header>
+    <h1>Farmacia Bondia</h1>
+    <p class="motto">“Acolo unde arta medicinei este iubită, există și dragoste pentru omenire.” — Hippocrate</p>
+</header>
+
+<nav>
+    <button onclick="showPage('home')">Acasă</button>
+    <button onclick="showPage('incaperi')">Încăperi</button>
+    <button onclick="showPage('personal')">Personal</button>
+    <button onclick="showPage('servicii')">Servicii</button>
+    <button onclick="showPage('galerie')">Galerie</button>
+    <button onclick="showPage('contact')">Contact & Mesaje</button>
+</nav>
+
+<div class="container">
+    
+    <div id="home" class="page active">
+        <h2>Despre Farmacie</h2>
+        <p>Farmacia este unitatea sanitară în care are loc manipularea medicamentelor deoarece face legătura dintre depozitul farmaceutic, producători și pacient.</p>
+        <p>Este totodată atât locul unde se prepară formele oficinale și rețete magistrale, cât și spațiul unde sunt depozitate până la eliberare substanțele medicamentoase, medicamentele, ceaiurile, cosmeticele, dermato-cosmeticele, dispozitivele tehnico-medicale în condițiile prevăzute de lege.</p>
+    </div>
+
+    <div id="incaperi" class="page">
+        <h2>Structura Unității</h2>
+        <div class="grid-incaperi">
+            <div class="card"><h3>Oficina</h3><p>Oficina este încăperea în care farmacistul sau asistentul medical de farmacie intră în contact cu pacientul și unde se găsesc medicamentele aranjate pe rafturi sau în dulapuri după forma farmaceutică, în ordine alfabetică, în funcție de  categoria de produse (ceaiuri, cosmetice, medicamente eliberate pe bază de rețetă, O.T.C.,  dispozitive tehnico-medicale), în funcție de calea de administrare, după gradul de vandabilitate și după intensitatea efectului terapeutic.</p></div>
+            <div class="card"><h3>Receptura</h3><p>Receptura este spațiul în care se prepară medicamente pe bază de prescripție magistrală și care comunică direct cu oficina. Tot aici sunt prezente aparatura și ustensilele pentru preparare, precum și dulapurile SEPARANDA (unde sunt depozitate substanțele puternic active) și VENENA (în care se depozitează substanțele toxice și stupefiante).</p></div>
+	    <div class="card"><h3>Laboratorul</h3><p>Laboratorul este încăperea unde se prepară cantități mari de medicamente (unguente, soluții, supozitoare). Aici se mai găsește aparatul de distilat, masa de analiză a substanțelor medicamentoase și de ambalare a produselor, dulapuri, ustensile, aparatură specială, rafturi etc.</p></div>
+            <div class="card"><h3>Depozitul</h3><p>Depozitul este spațiul prevăzut cu rafturi și dulapuri în care sunt aranjate după criterile din oficină medicamentele și celelalte produse parafarmaceutice (ceaiuri, dispozitive tehnico-medicale, dermato-cosmetice etc.) În depozit se află și masa de recepție și caietul de defectură unde se notează medicamentele lipsă.</p></div>
+            <div class="card"><h3>Boxa Sterilă</h3><p>Boxa sterilă este încăperea unde se prepară formele farmaceutice sterile: picături pentru ochi, preparate injectabile, perfuzii.</p></div>
+            <div class="card"><h3>Camera de gardă</h3><p>Camera de gardă este camera unde poate fi consiliat pacientul.</p></div>
+	    <div class="card"><h3>Biroul Farmaciei</h3><p>În biroul farmaciei se gasesc acte, rețete și literatura de specialitate.</p></div>
+	    <div class="card"><h3>Anexe</h3><p>Anexele sunt: spălătorul, vestiarul, toaleta.</p></div>
+        </div>
+    </div>
+
+    <div id="personal" class="page">
+        <h2>Echipa Noastră</h2>
+        <table>
+            <thead>
+                <tr><th>Post Ocupat</th><th>Nume și Prenume</th></tr>
+            </thead>
+            <tbody>
+                <tr><td><strong>Farmacist Șef</strong></td><td>Rică Venturiano </td></tr>
+                <tr><td><strong>Farmacist</strong></td><td>Tache Farfuridi, Zoe Trahanache </td></tr>
+                <tr><td><strong>Asistent Medical de Farmacie</strong></td><td>Felix Sima, Vitoria Lipan, Victor Petrini </td></tr>
+                <tr><td><strong>Operator PC</strong></td><td>Andrei Socol</td></tr>
+		<tr><td><strong>Îngrijitor</strong></td><td>Ștefan Tipătescu</td></tr>
+		<tr><td><strong>Agent de securitate</strong></td><td>Lică Sămădăul</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div id="contact" class="page">
+        <div class="contact-grid">
+            <div class="contact-info-box">
+                <h2>Contact</h2>
+                <p>📍 <strong>Adresa:</strong> Strada Vlad Țepeș, Nr. 2, Bistrița  </p>
+                <p>📞 <strong>Telefon:</strong> 0746 852 336 </p>
+                <p>🆘 <strong>Urgențe:</strong> 0759 076 977 </p>
+                <p>📧 <strong>E-mail:</strong> contact@farmaciabondia.ro </p>
+                
+                <h3 style="margin-top:25px; color: var(--vintage-green);">Program </h3>
+                <p>📅 Luni - Vineri: 08:00 – 20:00 </p>
+                <p>📅 Sâmbătă: 08:00 – 18:00 </p>
+                <p>📅 Duminică: 10:00 – 14:00 </p>
+            <iframe src="https://www.google.com/maps?q=Strada+Vlad+Tepes+2+Bistrita&output=embed" width="100%" height="200" style="margin-top:15px;"></iframe>
+</div>
+
+            <div class="form-box">
+                <h3>Trimite-ne un Mesaj</h3>
+                <form id="contactForm">
+                    <label>Nume Complet</label>
+                    <input type="text" id="name" required>
+                    <label>E-mail</label>
+                    <input type="email" id="email" required>
+                    <label>Mesaj</label>
+                    <textarea id="message" rows="4" required></textarea>
+                    <button type="submit" class="btn-send">Trimite Mesajul</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+<div id="servicii" class="page">
+    <h2>Serviciile Noastre</h2>
+    <ul>
+        <li>Eliberare medicamente pe bază de rețetă</li>
+        <li>Consiliere farmaceutică personalizată</li>
+        <li>Preparare rețete magistrale</li>
+        <li>Măsurarea tensiunii arteriale</li>
+        <li>Recomandări produse naturiste</li>
+    </ul>
+</div>
+
+<div id="galerie" class="page">
+<h2>Galerie</h2>
+<div class="grid-incaperi">
+
+<div class="card"><h3>Exterior</h3><img src="https://images.unsplash.com/photo-1689563417368-3ded868a808f" style="width:100%; cursor:pointer;" onclick="openImage(this.src);"></div>
+<div class="card"><h3>Oficina</h3><img src="https://www.ianson.ro/images/imagini-slider-mobilier-farmacii-01.jpg" style="width:100%; cursor:pointer;" onclick="openImage(this.src);"></div>
+<div class="card"><h3>Receptura</h3><img src="https://www.medicinacluj.ro/images/com_sobi2/gallery/348/348_image_6.jpg" style="width:100%; cursor:pointer;" onclick="openImage(this.src);"></div>
+<div class="card"><h3>Laborator</h3><img src="https://farmaciacutraditie.ro/image/cache/catalog/Untitled%20design_20260310_084405_0000-960x440w.png" style="width:100%; cursor:pointer;" onclick="openImage(this.src);"></div>
+<div class="card"><h3>Depozit</h3><img src="https://images.unsplash.com/photo-1642055514517-7b52288890ec" style="width:100%; cursor:pointer;" onclick="openImage(this.src)"></div>
+<div class="card"><h3>Boxa Sterilă</h3><img src="https://cdn.portafab.com/cmss_files/imagelibrary/Cleanroom/Applications/USP-797.jpg" style="width:100%; cursor:pointer;" onclick="openImage(this.src);"></div>
+<div class="card"><h3>Birou</h3><img src="https://guardianmed.net/media/4vcbxryp/dsc_0200-small.jpg" style="width:100%; cursor:pointer;" onclick="openImage(this.src);"></div>
+<div class="card"><h3>Camera de gardă</h3><img src="https://visionshopfitters.co.uk/wp-content/uploads/2019/10/Clarks-Pharmacy-Consultation-Room-Inside-1800x1200.jpg" style="width:100%; cursor:pointer;" onclick="openImage(this.src);"></div>
+<div class="card">
+    <h3>Anexe</h3>
+
+    <div style="display:flex; gap:10px;">
+        <img src="https://l2studioarch.com/wp-content/uploads/IMG_4759.jpg" style="width:33%; cursor:pointer;" onclick="openImage(this.src)">
+        <img src="https://www.duralinesystems.com/v/vspfiles/assets/images/DS%20500%20CL%20full%20glass%20door%20open.jpg" style="width:33%; cursor:pointer;" onclick="openImage(this.src)">
+        <img src="https://cdn.decorpad.com/photos/2017/02/02/black-metal-pharmacy-bath-vanity.jpg" style="width:33%; cursor:pointer;" onclick="openImage(this.src)">
+    </div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+
+<footer>
+    <p><strong>Liceul Teoretic Sanitar Bistrița </strong></p>
+    <p>Elev: Chiuzan Aurelian Horațiu | Coordonator: Prof. Anghelina Lucreția </p>
+    <p>Specializare: Asistent Medical de Farmacie, anul I, 2026 </p>
+</footer>
+
+<script>
+    function showPage(id) {
+    document.querySelectorAll('.page').forEach(p => {
+        p.classList.remove('active');
+    });
+
+    const page = document.getElementById(id);
+    if (page) {
+        page.classList.add('active');
+    }
+}
+function openImage(src) {
+    document.getElementById("imageModal").style.display = "flex";
+    document.getElementById("modalImg").src = src;
+}
+
+function closeImage() {
+    document.getElementById("imageModal").style.display = "none";
+}
+</script>
+
+</body>
+</html>
